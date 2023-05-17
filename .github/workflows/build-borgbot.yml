@@ -1,0 +1,15 @@
+name: build borgbot
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    uses: ./.github/workflows/rust-build-and-test.yml
+    with:
+      package: borgbot
