@@ -1,2 +1,5 @@
-# borgbot
-A utility bot for connecting charborgs chat to external services
+# borger
+
+A collection of tools and services for [charborg][charborg]
+
+[charborg]:https://twitch.tv/charborg
