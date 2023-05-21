@@ -1,6 +1,7 @@
+use async_trait::async_trait;
 use tracing::{event, Level};
 use twitch_irc::{ClientConfig, SecureTCPTransport, TwitchIRCClient};
-use twitch_irc::login::StaticLoginCredentials;
+use twitch_irc::login::{LoginCredentials, TokenStorage};
 use twitch_irc::message::ServerMessage::Privmsg;
 
 pub(crate) async fn connect_to_twitch_chat(streamer: String) {
@@ -42,4 +43,21 @@ pub(crate) async fn connect_to_twitch_chat(streamer: String) {
 
     // initialize our message receiver
     join_handle.await.unwrap();
+}
+
+#[derive(Debug)]
+struct CustomTokenStorage {}
+
+#[async_trait]
+impl TokenStorage for CustomTokenStorage {
+    type LoadError = ();
+    type UpdateError = ();
+
+    async fn load_token(&self) -> Result<Option<String>, Self::LoadError> {
+        Ok(None)
+    }
+
+    async fn update_token(&self, _: &str) -> Result<(), Self::UpdateError> {
+        Ok(())
+    }
 }
