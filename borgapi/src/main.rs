@@ -3,7 +3,6 @@ use std::net::SocketAddr;
 
 use axum::{
     http::StatusCode,
-    response::IntoResponse,
     routing::{get, post},
     Json, Router,
 };
@@ -34,7 +33,7 @@ async fn main() {
     let addr = SocketAddr::from(([0, 0, 0, 0], get_port()));
 
     // Start axum server on specified address
-    info!("Binding to http://{}", addr);
+    info!("Starting borger api to http://{}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
