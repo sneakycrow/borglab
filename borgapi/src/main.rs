@@ -1,18 +1,27 @@
-use serde::{Deserialize, Serialize};
+use std::env;
+use std::net::SocketAddr;
 
 use axum::{
     http::StatusCode,
-    Json,
     response::IntoResponse,
-    Router, routing::{get, post},
+    routing::{get, post},
+    Json, Router,
 };
+use serde::{Deserialize, Serialize};
+use tracing::info;
+use tracing_subscriber::EnvFilter;
 
 mod db;
 
+const DEFAULT_PORT: &str = "8000";
+
 #[tokio::main]
 async fn main() {
-    // initialize tracing
-    tracing_subscriber::fmt::init();
+    // Initialize tracing
+    tracing_subscriber::fmt()
+        .with_target(true)
+        .with_env_filter(EnvFilter::from_default_env())
+        .init();
 
     // build our application with a route
     let app = Router::new()
@@ -21,9 +30,23 @@ async fn main() {
         // `POST /users` goes to `create_user`
         .route("/users", post(create_user));
 
-    // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    // Create address based on localhost and specified port
+    let addr = SocketAddr::from(([0, 0, 0, 0], get_port()));
+
+    // Start axum server on specified address
+    info!("Binding to http://{}", addr);
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
+}
+
+/// Function for dynamically gathering the port based on the PORT env variable or falling back to the DEFAULT_PORT
+fn get_port() -> u16 {
+    env::var("PORT")
+        .unwrap_or(DEFAULT_PORT.to_string())
+        .parse()
+        .expect("Need a number for the port")
 }
 
 // basic handler that responds with a static string
