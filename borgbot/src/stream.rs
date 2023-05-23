@@ -57,7 +57,7 @@ async fn register_user() -> Result<(), reqwest::Error> {
     map.insert("body", "json");
 
     let client = reqwest::Client::new();
-    let register_endpoint = format!("{}/register", get_api_url());
+    let register_endpoint = format!("{}/users", get_api_url());
     client.post(register_endpoint).json(&map).send().await?;
 
     Ok(())
