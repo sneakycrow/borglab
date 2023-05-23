@@ -1,3 +1,4 @@
+use crate::sea_orm::NotSet;
 use sea_orm_migration::prelude::*;
 
 #[derive(DeriveMigrationName)]
@@ -12,7 +13,22 @@ impl MigrationTrait for Migration {
                     .table(Viewers::Table)
                     .if_not_exists()
                     .col(ColumnDef::new(Viewers::Id).uuid().not_null().primary_key())
-                    .col(ColumnDef::new(Viewers::Username).string().not_null())
+                    .col(
+                        ColumnDef::new(Viewers::Username)
+                            .string()
+                            .unique_key()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Viewers::CreatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Viewers::UpdatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
                     .to_owned(),
             )
             .await
@@ -31,4 +47,6 @@ enum Viewers {
     Table,
     Id,
     Username,
+    CreatedAt,
+    UpdatedAt,
 }
