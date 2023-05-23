@@ -1,4 +1,4 @@
-name: build borgbot
+name: build borgapi
 
 on:
   workflow_dispatch:
