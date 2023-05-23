@@ -1,4 +1,4 @@
-name: build borgbot
+name: build borgapi
 
 on:
   workflow_dispatch:
@@ -13,4 +13,4 @@ jobs:
   build:
     uses: ./.github/workflows/rust-build-and-test.yml
     with:
-      package: borgbot
+      package: borgapi
