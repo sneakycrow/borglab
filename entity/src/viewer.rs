@@ -1,3 +1,4 @@
+use chrono::Utc;
 use sea_orm::entity::prelude::*;
 use sea_orm::ActiveValue::Set;
 
@@ -19,6 +20,8 @@ impl ActiveModelBehavior for ActiveModel {
     fn new() -> Self {
         Self {
             id: Set(Uuid::new_v4()),
+            created_at: Set(Utc::now()),
+            updated_at: Set(Utc::now()),
             ..ActiveModelTrait::default()
         }
     }
