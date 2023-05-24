@@ -1,5 +1,8 @@
 use std::collections::HashMap;
-use tracing::info;
+
+use anyhow::anyhow;
+use reqwest::StatusCode;
+use tracing::{error, info};
 use tracing::{event, Level};
 use twitch_irc::login::StaticLoginCredentials;
 use twitch_irc::message::ServerMessage::Privmsg;
@@ -27,8 +30,20 @@ pub(crate) async fn connect_to_twitch_chat(streamer: String) {
                         id = msg.message_id,
                     );
                     match msg.message_text {
-                        _text if msg.message_text.to_lowercase().contains("!register") => {
+                        _text if msg.message_text.contains("e") => {
                             info!("New viewer attempting to register {}", msg.sender.name);
+                            let mut user = msg.sender.name;
+                            tokio::spawn(async move {
+                                user = user.to_owned();
+                                match register_user(&user).await {
+                                    Ok(_) => {
+                                        info!("Successfully registered {}", user);
+                                    }
+                                    Err(e) => {
+                                        error!("Failed to register {}: {}", user, e);
+                                    }
+                                }
+                            });
                         }
                         _ => {}
                     }
@@ -51,14 +66,20 @@ fn get_api_url() -> String {
 }
 
 /// Utility function for sending a registration request to the borgapi
-async fn register_user() -> Result<(), reqwest::Error> {
-    let mut map = HashMap::new();
-    map.insert("lang", "rust");
-    map.insert("body", "json");
+async fn register_user(username: &str) -> Result<(), anyhow::Error> {
+    let mut json_body = HashMap::new();
+    json_body.insert("username", username);
 
     let client = reqwest::Client::new();
     let register_endpoint = format!("{}/users", get_api_url());
-    client.post(register_endpoint).json(&map).send().await?;
+    let res = client
+        .post(register_endpoint)
+        .json(&json_body)
+        .send()
+        .await?;
 
-    Ok(())
+    match res.status() {
+        StatusCode::CREATED => Ok(()),
+        _ => Err(anyhow!("Failed to register {}", username)),
+    }
 }
