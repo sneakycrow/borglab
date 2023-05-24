@@ -5,9 +5,10 @@ use axum::{
     routing::{get, post},
     Router,
 };
-use migration::{Migrator, MigratorTrait};
 use tracing::info;
 use tracing_subscriber::EnvFilter;
+
+use migration::{Migrator, MigratorTrait};
 
 mod routes;
 
@@ -30,11 +31,9 @@ async fn main() {
         .await
         .expect("Failed to migrate database");
 
-    // build our application with a route
     let app = Router::new()
-        // `GET /` goes to `root`
         .route("/", get(root))
-        // `POST /users` goes to `create_user`
+        .route("/users", get(routes::user::get_users))
         .route("/users", post(routes::user::create_user));
 
     // Create address based on localhost and specified port
