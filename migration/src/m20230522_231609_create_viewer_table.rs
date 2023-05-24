@@ -1,4 +1,3 @@
-use crate::sea_orm::NotSet;
 use sea_orm_migration::prelude::*;
 
 #[derive(DeriveMigrationName)]

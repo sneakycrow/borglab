@@ -2,9 +2,10 @@ use axum::http::StatusCode;
 use axum::Json;
 use chrono::Utc;
 use sea_orm::prelude::Uuid;
-use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue::Set;
+use sea_orm::{ActiveModelTrait, EntityTrait, QuerySelect};
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use tracing::{error, info};
 
 use entity::viewer;
@@ -14,6 +15,13 @@ use crate::routes::connect;
 // the input to our `create_user` handler
 #[derive(Deserialize)]
 pub(crate) struct CreateUser {
+    username: String,
+}
+
+// the output to our `create_user` handler
+#[derive(Serialize)]
+pub(crate) struct User {
+    id: Uuid,
     username: String,
 }
 
@@ -48,9 +56,20 @@ pub(crate) async fn create_user(
     }
 }
 
-// the output to our `create_user` handler
-#[derive(Serialize)]
-pub(crate) struct User {
-    id: Uuid,
-    username: String,
+pub(crate) async fn get_users() -> (StatusCode, Json<Value>) {
+    use viewer::Entity as Viewer;
+    let db = connect().await.unwrap();
+    let viewers: Vec<Value> = Viewer::find()
+        .select_only()
+        .columns([
+            viewer::Column::Username,
+            viewer::Column::CreatedAt,
+            viewer::Column::UpdatedAt,
+        ])
+        .into_json()
+        .all(&db)
+        .await
+        .unwrap();
+    db.close().await.unwrap();
+    (StatusCode::OK, Json(json!({ "viewers": viewers })))
 }
