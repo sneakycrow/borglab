@@ -1,9 +1,11 @@
 import ViewerList, { Viewer } from "@/components/ViewerList";
+import AvatarGenerator from "@/components/AvatarGenerator";
 
 const Home = async () => {
   const viewers = await getViewers();
   return (
     <main className="flex flex-col items-center min-h-screen py-2">
+      <AvatarGenerator />
       <ViewerList viewers={viewers} />
     </main>
   );
