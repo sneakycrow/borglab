@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use tracing::{error, info};
 
-use entity::viewer;
+use entity::{avatar, viewer};
 
 use crate::routes::connect;
 
@@ -59,7 +59,8 @@ pub(crate) async fn create_user(
 pub(crate) async fn get_users() -> (StatusCode, Json<Value>) {
     use viewer::Entity as Viewer;
     let db = connect().await.unwrap();
-    let viewers: Vec<Value> = Viewer::find()
+    let viewers: Vec<(Value, Option<Value>)> = Viewer::find()
+        .find_also_related(avatar::Entity)
         .select_only()
         .columns([
             viewer::Column::Username,
