@@ -7,6 +7,7 @@ use sea_orm::ActiveValue::Set;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: Uuid,
+    pub viewer_id: Uuid,
     pub structure: Json,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
