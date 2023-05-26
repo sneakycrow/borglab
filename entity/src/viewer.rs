@@ -3,17 +3,25 @@ use sea_orm::entity::prelude::*;
 use sea_orm::ActiveValue::Set;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
-#[sea_orm(table_name = "viewers")]
+#[sea_orm(table_name = "avatars")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: Uuid,
-    pub username: String,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_one = "super::avatar::Entity")]
+    Avatar,
+}
+
+impl Related<super::avatar::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Avatar.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {
     /// Create a new ActiveModel with default values. Also used by `Default::default()`.

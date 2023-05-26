@@ -30,7 +30,7 @@ pub(crate) async fn connect_to_twitch_chat(streamer: String) {
                         id = msg.message_id,
                     );
                     match msg.message_text {
-                        _text if msg.message_text.contains("e") => {
+                        _text if msg.message_text.contains("!register") => {
                             info!("New viewer attempting to register {}", msg.sender.name);
                             let mut user = msg.sender.name;
                             tokio::spawn(async move {
