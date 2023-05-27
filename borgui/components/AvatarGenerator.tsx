@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DndContext,
   DragEndEvent,
@@ -8,6 +6,7 @@ import {
 } from "@dnd-kit/core";
 import cx from "classnames";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface DroppableZoneProps {
   children: React.ReactNode;
@@ -69,7 +68,7 @@ const AvatarGenerator = () => {
   const [isDropped, setIsDropped] = useState(false);
   const draggableMarkup = (
     <DraggableSticker id="draggable-example">
-      <img
+      <Image
         src="https://media.discordapp.net/attachments/1101563209552502875/1111040845920075827/image.png"
         alt=""
       />
