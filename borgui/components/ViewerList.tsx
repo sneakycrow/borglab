@@ -53,4 +53,15 @@ const ViewerList = (props: ViewerListProps) => {
   );
 };
 
+export const getViewers = async (): Promise<Viewer[]> => {
+  try {
+    const res = await fetch(`${process.env.API_URL}/users`);
+    const data = (await res.json()) as { viewers: Viewer[] };
+    return data.viewers;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+};
+
 export default ViewerList;
