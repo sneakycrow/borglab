@@ -7,7 +7,7 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 import cx from "classnames";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface DroppableZoneProps {
   children: React.ReactNode;
@@ -32,17 +32,26 @@ const DroppableZone = (props: DroppableZoneProps) => {
 
 interface DraggableStickerProps {
   children: React.ReactNode;
+  id: string;
 }
 
 const DraggableSticker = (props: DraggableStickerProps) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: "draggable",
+    id: props.id,
   });
+  useEffect(() => {
+    if (transform) {
+      setPosition(transform);
+    }
+  }, [transform]);
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
       }
-    : undefined;
+    : {
+        transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+      };
   return (
     <div
       ref={setNodeRef}
@@ -59,7 +68,7 @@ const DraggableSticker = (props: DraggableStickerProps) => {
 const AvatarGenerator = () => {
   const [isDropped, setIsDropped] = useState(false);
   const draggableMarkup = (
-    <DraggableSticker>
+    <DraggableSticker id="draggable-example">
       <img
         src="https://media.discordapp.net/attachments/1101563209552502875/1111040845920075827/image.png"
         alt=""
