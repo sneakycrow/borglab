@@ -34,7 +34,8 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root))
         .route("/users", get(routes::user::get_users))
-        .route("/users", post(routes::user::create_user));
+        .route("/users", post(routes::user::create_user))
+        .route("/users/avatar", post(routes::user::save_avatar));
 
     // Create address based on localhost and specified port
     let addr = SocketAddr::from(([0, 0, 0, 0], get_port()));

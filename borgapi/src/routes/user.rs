@@ -3,12 +3,12 @@ use axum::Json;
 use chrono::Utc;
 use sea_orm::prelude::Uuid;
 use sea_orm::ActiveValue::Set;
-use sea_orm::{ActiveModelTrait, EntityTrait, QuerySelect};
+use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, QuerySelect};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use tracing::{error, info};
 
-use entity::viewer;
+use entity::{avatar, viewer};
 
 use crate::routes::connect;
 
@@ -58,8 +58,10 @@ pub(crate) async fn create_user(
 
 pub(crate) async fn get_users() -> (StatusCode, Json<Value>) {
     use viewer::Entity as Viewer;
+
     let db = connect().await.unwrap();
-    let viewers: Vec<Value> = Viewer::find()
+    let viewers: Vec<(Value, Option<Value>)> = Viewer::find()
+        .find_also_related(avatar::Entity)
         .select_only()
         .columns([
             viewer::Column::Username,
@@ -72,4 +74,41 @@ pub(crate) async fn get_users() -> (StatusCode, Json<Value>) {
         .unwrap();
     db.close().await.unwrap();
     (StatusCode::OK, Json(json!({ "viewers": viewers })))
+}
+
+#[derive(Deserialize)]
+pub(crate) struct SaveAvatar {
+    viewer_id: String,
+    structure: Value,
+}
+
+pub(crate) async fn save_avatar(Json(payload): Json<SaveAvatar>) -> (StatusCode, Json<()>) {
+    use viewer::Entity as Viewer;
+    let db = connect().await.unwrap();
+    // Get viewer
+    // Save avatar
+    let viewer: Option<viewer::Model> = Viewer::find()
+        .filter(viewer::Column::Id.eq(payload.viewer_id))
+        .one(&db)
+        .await
+        .expect("Failed querying database for viewer");
+
+    match viewer {
+        Some(viewer) => {
+            let avatar = avatar::ActiveModel {
+                id: Set(Uuid::new_v4()),
+                viewer_id: Set(viewer.id),
+                structure: Set(payload.structure),
+                created_at: Set(Utc::now()),
+                updated_at: Set(Utc::now()),
+            };
+            avatar.insert(&db).await.expect("Failed to insert avatar");
+            db.close().await.unwrap();
+            (StatusCode::CREATED, Json(()))
+        }
+        None => {
+            db.close().await.unwrap();
+            (StatusCode::NOT_FOUND, Json(()))
+        }
+    }
 }
