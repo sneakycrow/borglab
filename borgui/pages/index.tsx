@@ -1,9 +1,10 @@
-import Login from "@/components/Login";
 import { useSession } from "next-auth/react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
+import Layout from "@/components/Layout";
+import Login from "@/components/Login";
 
 const Home = () => {
   const { data: session, status } = useSession();
@@ -15,29 +16,30 @@ const Home = () => {
     );
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <main className="flex flex-col items-center min-h-screen py-2">
-        {!session ? (
-          <Login />
-        ) : (
-          <div className="flex flex-col items-center justify-center min-h-screen py-2">
-            <h1 className="text-4xl font-bold">Borgui</h1>
-            <p className="text-2xl font-bold">Welcome {session.user?.name}</p>
-            <Link href="/api/auth/signout" className="text-xl text-red-500">
-              Sign out
-            </Link>
-            <div className="flex">
-              <div className="h-[50vh] w-[50vh] flex items-center justify-center opacity-20 hover:opacity-100 cursor-pointer">
+      <Layout title="borgui" className="divide-y-2">
+        <div className="flex flex-col items-center justify-center min-h-[50vh] py-2 w-full">
+          {!session ? (
+            <Login />
+          ) : (
+            <div className="flex w-full space-x-10">
+              <Link
+                href="/"
+                className="min-h-[50vh] h-full w-full flex items-center justify-end opacity-20 hover:opacity-100 cursor-pointer transition-opacity duration-300"
+              >
                 <IconChevronLeft size={100} />
-                <h4 className="text-4xl font-extrabold">Avatar Generator</h4>
-              </div>
-              <div className="h-[50vh] w-[50vh] flex items-center justify-center opacity-20 hover:opacity-100 cursor-pointer">
-                <h4 className="text-4xl font-extrabold">Viewer Manager</h4>
+                <h4 className="text-4xl font-extrabold">Viewer Portal</h4>
+              </Link>
+              <Link
+                href="/admin"
+                className="min-h-[50vh] h-full w-full flex items-center justify-start opacity-20 hover:opacity-100 cursor-pointer transition-opacity duration-300"
+              >
+                <h4 className="text-4xl font-extrabold">Staff Portal</h4>
                 <IconChevronRight size={100} />
-              </div>
+              </Link>
             </div>
-          </div>
-        )}
-      </main>
+          )}
+        </div>
+      </Layout>
     </Suspense>
   );
 };
