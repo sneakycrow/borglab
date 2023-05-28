@@ -19,12 +19,18 @@ const Navigation = (props: NavigationProps) => {
   const { data: session } = useSession();
   return (
     <header className="flex justify-between items-center w-full border-b-2 py-4">
-      <h1 className="text-4xl font-bold">{props.title}</h1>
+      <div className="flex space-x-2 items-end">
+        <Link href="/">
+          <h2 className="text-3xl font-bold text-black hover:text-green-500 transition-colors duration-300">
+            Borgui
+          </h2>
+        </Link>
+        <h1 className="text-2xl font-bold text-gray-400">{props.title}</h1>
+      </div>
       <nav className="flex items-center space-x-4">
         <ul className="flex justify-evenly space-x-2">
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/about">About</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
+          <NavLink href="/admin">Admin</NavLink>
         </ul>
         {session && (
           <Profile
