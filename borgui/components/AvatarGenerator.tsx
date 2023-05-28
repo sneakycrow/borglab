@@ -20,11 +20,17 @@ const DroppableZone = (props: DroppableZoneProps) => {
   return (
     <div
       ref={setNodeRef}
-      className={cx("h-[400px] w-[400px] bg-amber-200", {
-        "bg-amber-400": isOver,
+      className={cx("h-[400px] w-2/3 bg-gray-300 rounded-sm", {
+        "bg-gray-400": isOver,
       })}
     >
-      {props.children}
+      {props.children ? (
+        props.children
+      ) : (
+        <div className="h-full w-full flex items-center justify-center">
+          <h1 className="text-gray-400 text-8xl font-bold">Drop here</h1>
+        </div>
+      )}
     </div>
   );
 };
