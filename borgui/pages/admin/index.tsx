@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 const AdminPage = () => {
   const { data: session } = useSession({ required: true });
   return (
-    <Layout title="/admin">
+    <Layout title="borgui/admin">
       <div>
         <h1>Admin Page</h1>
       </div>
