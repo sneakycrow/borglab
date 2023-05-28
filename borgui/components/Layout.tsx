@@ -5,7 +5,7 @@ import Navigation from "@/components/Navigation";
 interface LayoutProps {
   children: ReactNode;
   className?: string;
-  title: string;
+  title?: string;
 }
 
 const Layout = (props: LayoutProps) => {
@@ -15,7 +15,7 @@ const Layout = (props: LayoutProps) => {
   );
   return (
     <main className={classes}>
-      <Navigation title={props.title} />
+      <Navigation title={props.title ?? ""} />
       {props.children}
     </main>
   );
