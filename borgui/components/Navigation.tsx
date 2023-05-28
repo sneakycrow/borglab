@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import Profile from "@/components/Profile";
+import { useSession } from "next-auth/react";
 
 interface NavigationProps {
   title: string;
@@ -14,15 +16,25 @@ const NavLink = (props: { href: string; children: string }) => {
 };
 
 const Navigation = (props: NavigationProps) => {
+  const { data: session } = useSession();
   return (
-    <nav className="flex justify-between items-center w-full border-b-2 py-4">
+    <header className="flex justify-between items-center w-full border-b-2 py-4">
       <h1 className="text-4xl font-bold">{props.title}</h1>
-      <ul className="flex justify-evenly space-x-2">
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/about">About</NavLink>
-        <NavLink href="/contact">Contact</NavLink>
-      </ul>
-    </nav>
+      <nav className="flex items-center space-x-4">
+        <ul className="flex justify-evenly space-x-2">
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/about">About</NavLink>
+          <NavLink href="/contact">Contact</NavLink>
+        </ul>
+        {session && (
+          <Profile
+            image={session.user?.image ?? ""}
+            name={session.user?.name ?? ""}
+            email={session.user?.email ?? ""}
+          />
+        )}
+      </nav>
+    </header>
   );
 };
 
