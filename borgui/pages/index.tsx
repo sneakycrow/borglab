@@ -21,9 +21,6 @@ const Home = () => {
             <Login />
           ) : (
             <>
-              <p className="text-gray-300 font-bold text-3xl">
-                Content coming soon
-              </p>
               <AvatarGenerator />
             </>
           )}
