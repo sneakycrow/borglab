@@ -6,15 +6,15 @@ import {
 } from "@dnd-kit/core";
 import cx from "classnames";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 
 interface DroppableZoneProps {
-  children: React.ReactNode;
+  children: React.ReactNode | null;
+  id?: string;
 }
 
 const DroppableZone = (props: DroppableZoneProps) => {
   const { isOver, setNodeRef } = useDroppable({
-    id: "avatar-container",
+    id: props.id ?? "droppable-container",
   });
 
   return (
