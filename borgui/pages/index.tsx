@@ -16,7 +16,7 @@ const Home = () => {
     );
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <Layout title="borgui" className="divide-y-2">
+      <Layout title="borgui">
         <div className="flex flex-col items-center justify-center min-h-[50vh] py-2 w-full">
           {!session ? (
             <Login />
