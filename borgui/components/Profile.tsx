@@ -12,7 +12,7 @@ interface ProfileProps {
 const Profile = (props: ProfileProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const menuClasses = cx(
-    "flex flex-col ml-4 items-end justify-center absolute -bottom-[100%] right-0 bg-white p-2 rounded-md shadow-md"
+    "flex flex-col items-end justify-center absolute bottom-[-75px] right-0 bg-white p-2 rounded-md shadow-md"
   );
   return (
     <div
