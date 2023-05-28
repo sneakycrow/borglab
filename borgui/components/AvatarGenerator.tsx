@@ -58,13 +58,7 @@ const DraggableSticker = (props: DraggableStickerProps) => {
         transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
       };
   return (
-    <div
-      ref={setNodeRef}
-      className="h-[100px] w-[100px]"
-      style={style}
-      {...listeners}
-      {...attributes}
-    >
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
       {props.children}
     </div>
   );
@@ -74,15 +68,12 @@ const AvatarGenerator = () => {
   const [isDropped, setIsDropped] = useState(false);
   const draggableMarkup = (
     <DraggableSticker id="draggable-example">
-      <Image
-        src="https://media.discordapp.net/attachments/1101563209552502875/1111040845920075827/image.png"
-        alt=""
-      />
+      <div className="h-[100px] w-[100px] bg-gray-500 rounded-sm"></div>
     </DraggableSticker>
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
-    if (event.over && event.over.id === "avatar-container") {
+    if (event.over && event.over.id === "droppable-container") {
       setIsDropped(true);
     }
   };
@@ -90,7 +81,8 @@ const AvatarGenerator = () => {
   return (
     <DndContext onDragEnd={handleDragEnd}>
       {!isDropped ? draggableMarkup : null}
-      <DroppableZone>{isDropped ? draggableMarkup : "Drop here"}</DroppableZone>
+
+      <DroppableZone>{isDropped ? draggableMarkup : null}</DroppableZone>
     </DndContext>
   );
 };
