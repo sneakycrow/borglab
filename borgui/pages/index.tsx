@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Layout from "@/components/Layout";
 import Login from "@/components/Login";
-import AvatarGenerator from "@/components/AvatarGenerator";
 
 const Home = () => {
   const { data: session, status } = useSession();
@@ -17,13 +16,7 @@ const Home = () => {
     <Suspense fallback={<LoadingSpinner />}>
       <Layout>
         <div className="flex flex-col items-center justify-center min-h-[50vh] py-2 w-full">
-          {!session ? (
-            <Login />
-          ) : (
-            <>
-              <AvatarGenerator />
-            </>
-          )}
+          {!session ? <Login /> : <>avatar generator placeholder</>}
         </div>
       </Layout>
     </Suspense>
