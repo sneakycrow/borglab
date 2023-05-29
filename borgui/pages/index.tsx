@@ -3,7 +3,8 @@ import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Layout from "@/components/Layout";
 import Login from "@/components/Login";
-import AvatarGenerator from "@/components/AvatarGenerator";
+import { Canvas } from "@react-three/fiber";
+import Box from "@/components/Box";
 
 const Home = () => {
   const { data: session, status } = useSession();
@@ -20,9 +21,13 @@ const Home = () => {
           {!session ? (
             <Login />
           ) : (
-            <>
-              <AvatarGenerator />
-            </>
+            <div className="min-h-[500px]">
+              <Canvas>
+                <ambientLight />
+                <pointLight position={[10, 10, 10]} />
+                <Box />
+              </Canvas>
+            </div>
           )}
         </div>
       </Layout>

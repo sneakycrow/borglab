@@ -1,0 +1,14 @@
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "borgui"
+primary_region = "ord"
+
+[env]
+NEXTAUTH_URL = "https://borgui.fly.dev"
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
