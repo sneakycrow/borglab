@@ -21,13 +21,11 @@ const Home = () => {
           {!session ? (
             <Login />
           ) : (
-            <div className="min-h-[500px]">
-              <Canvas>
-                <ambientLight />
-                <pointLight position={[10, 10, 10]} />
-                <Box />
-              </Canvas>
-            </div>
+            <Canvas>
+              <ambientLight />
+              <pointLight position={[10, 10, 10]} />
+              <Box />
+            </Canvas>
           )}
         </div>
       </Layout>
