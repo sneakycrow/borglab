@@ -18,18 +18,23 @@ const Box = (props: BoxProps) => {
   // Subscribe this component to the render-loop, rotate the mesh every frame
   // @ts-ignore
   useFrame((state, delta) => {
+    // @ts-ignore
     ref.current.rotation.x += delta;
+    // @ts-ignore
     ref.current.rotation.z += delta;
   });
 
   const bind = useDrag(
     ({ offset: [x, y] }) => {
+      // @ts-ignore
       const [, , z] = position;
       setPosition([x / aspect, -y / aspect, z]);
     },
+    // @ts-ignore
     { pointerEvents: true }
   );
   return (
+    // @ts-ignore
     <mesh
       {...props}
       position={position}
