@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { useLoader, useThree, Vector3 } from "@react-three/fiber";
 import { TextureLoader } from "three";
 import { useRef, useState } from "react";
@@ -18,7 +20,6 @@ const Image = (props: ImageProps) => {
   const { size, viewport } = useThree();
   const aspect = size.width / viewport.width;
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  // @ts-ignore
 
   const bind = useDrag(
     ({ offset: [x, y] }) => {
