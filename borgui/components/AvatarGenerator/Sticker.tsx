@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { useDrag } from "@use-gesture/react";
 
 interface ImageProps {
-  startingPosition: Vector3;
+  startingPosition?: Vector3;
   img: string;
 }
 
@@ -16,7 +16,9 @@ const Image = (props: ImageProps) => {
   // Hold state for hovered and clicked events
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
-  const [position, setPosition] = useState<Vector3>(props.startingPosition);
+  const [position, setPosition] = useState<Vector3>(
+    props.startingPosition ?? [0, 0, 0]
+  );
   const { size, viewport } = useThree();
   const aspect = size.width / viewport.width;
   // Subscribe this component to the render-loop, rotate the mesh every frame
