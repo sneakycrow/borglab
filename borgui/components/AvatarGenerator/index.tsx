@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import Box from "@/components/Box";
 import React, { Suspense, useState } from "react";
 import Sticker from "@/components/AvatarGenerator/Sticker";
+import cx from "classnames";
 
 const stickerList = [
   {
@@ -23,6 +24,15 @@ type TSticker = {
 
 const AvatarGenerator = () => {
   const [selectedStickers, setSelectedStickers] = useState<TSticker[]>([]);
+  const [activeSticker, setActiveSticker] = useState<TSticker | null>(null);
+
+  const activateSticker = (sticker: TSticker) => {
+    if (activeSticker?.id === sticker.id) {
+      setActiveSticker(null);
+    } else {
+      setActiveSticker(sticker);
+    }
+  };
   return (
     <div className="w-full min-h-[500px]">
       {selectedStickers.length > 0 && (
@@ -39,7 +49,10 @@ const AvatarGenerator = () => {
                   alt={sticker.alt}
                   width={sticker.width}
                   height={sticker.height}
-                  className="self-start"
+                  onClick={() => activateSticker(sticker)}
+                  className={cx("border-4 self-start rounded-md", {
+                    "border-green-500": activeSticker?.id === sticker.id,
+                  })}
                 />
               </div>
             ))}
