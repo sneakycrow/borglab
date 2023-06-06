@@ -17,7 +17,7 @@ pub async fn main() {
 }
 
 fn init_tracing() -> WorkerGuard {
-    let file_appender = tracing_appender::rolling::hourly("./_data/", "log_chat_messages");
+    let file_appender = tracing_appender::rolling::hourly("./_data", "log_chat_messages");
     let (file_writer, guard) = tracing_appender::non_blocking(file_appender);
     tracing::subscriber::set_global_default(
         fmt::Subscriber::builder()
